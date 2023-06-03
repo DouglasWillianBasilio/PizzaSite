@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../styles/Home.css';
+import styles from "../styles/Home.css"
 import { Link } from "react-router-dom";
 import BannerImage from "../assets/pizza.jpeg"
 
