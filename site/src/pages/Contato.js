@@ -1,34 +1,74 @@
-import React from 'react'
+import { useState } from 'react';
 import styles from "../styles/Contato.css"
 import PizzaLeft from "../assets/pizzaLeft.jpg"
+import emailjs from '@emailjs/browser';
+
 function Contato() {
-    return (
-        <div className='contato'>
-            <div className='leftSide' style={{ backgroundImage: `url(${PizzaLeft})` }}></div>
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [message, setMessage] = useState('')
 
-            <div className='rightSide'>
-                <h1> ENTRE EM CONTATO</h1>
+  function sendEmail(e) {
+    e.preventDefault();
 
-                <form id='contato-form' method='POST'>
-                    <label htmlFor='nome'> Nome Completo </label>
-                    <input nome="nome" placeholder='Coloque seu nome...' type='text' />
+    if(name === '' || email === '' || message === ''){
+      alert("Preencha todos os campos");
+      return;
+    }
+    const tempateParams = {
+      from_name: name,
+      message: message,
+      email: email
+    }
 
-                    <label htmlFor='celular'> WhatsApp </label>
-                    <input nome="celular" placeholder='Coloque seu número...' type='text' />
+    emailjs.send("service_fqh3ljq", "template_8tgwyri", tempateParams, "qVoYy-0BtnD7Swlr2")
+    .then((response) => {
+      console.log("email enviado", response.status, response.text)
+      setName('')
+      setEmail('')
+      setMessage('')
+    }, (err) => {
+      console.log("ERROR: ", err)
+    })
+    
+  }
 
-                    <label htmlFor='mensagem'> Sua mensagem </label>
-                    <textarea rows="6" 
-                    placeholder='Sua mensagem' 
-                    name='mensagem'
-                    required
-                    >
-                    </textarea>
+  return (
+    <div className="container">
+      <h1 className="title">Contato</h1>
 
-                    <button type='submit'>ENVIAR</button>
-                </form>
-            </div>
-        </div>
-    )
+      <form className="form" onSubmit={sendEmail}>
+        <input 
+          className="input"
+          type="text"
+          placeholder="Digite seu nome"
+          onChange={(e) => setName(e.target.value)}
+          value={name}
+        />
+        
+        <input 
+          className="input"
+          type="text"
+          placeholder="Digite seu email"
+          onChange={(e) => setEmail(e.target.value)}
+          value={email}
+        />
+
+        <textarea 
+          className="textarea"
+          placeholder="Digite sua mensagem..."
+          onChange={(e) => setMessage(e.target.value)}
+          value={message}
+        />
+
+        <input className="button" type="submit" value="Enviar" />
+      </form>
+
+    </div>
+  );
 }
+
+
+
 
 export default Contato
